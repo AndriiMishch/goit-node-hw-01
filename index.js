@@ -1,13 +1,13 @@
-const contactsServices = require("./contacts.js");
+const contacts = require("./contacts");
 const { Command } = require("commander");
 const program = new Command();
 
 program
-  .option("-a, --action <type>", "choose action")
-  .option("-i, --id <type>", "user id")
-  .option("-n, --name <type>", "user name")
-  .option("-e, --email <type>", "user email")
-  .option("-p, --phone <type>", "user phone");
+  .option("-a, --action <action>", "choose action")
+  .option("-i, --id <id>", "user id")
+  .option("-n, --name <name>", "user name")
+  .option("-e, --email <email>", "user email")
+  .option("-p, --phone <phone>", "user phone");
 
 program.parse(process.argv);
 const argv = program.opts();
@@ -15,19 +15,19 @@ const argv = program.opts();
 function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case "list":
-      contactsServices.listContacts();
+      contacts.listContacts().then((data) => console.table(data));
       break;
 
     case "get":
-      contactsServices.getContactById(id);
+      contacts.getContactById(id).then((data) => console.log(data));
       break;
 
     case "add":
-      contactsServices.addContact(name, email, phone);
+      contacts.addContact(name, email, phone).then((data) => console.log(data));
       break;
 
     case "remove":
-      contactsServices.removeContact(id);
+      contacts.removeContact(id).then((data) => console.log(data));
       break;
 
     default:
